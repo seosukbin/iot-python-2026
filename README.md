@@ -1,11 +1,6 @@
 # iot-python-2026
 IoT개발자 파이썬 리포지토리
 
-
-
-
-
-
 - 문법 비교표
 
 |이론개념|C/C++|Python|
@@ -52,4 +47,13 @@ https://www.python.org/downloads/ - 다운로드
     ![alt text](image-3.png)
 
     ### 파이썬 기본 학습
-    
+    1. 기본 입출력
+        - .py 파일 작성
+        - Ctrl +F5 파일 실행
+        - 디버거 선택 >Python Debugger를 선택
+
+    2. 리스트(배열 대체)
+        - append ~ sort까지 11개 함수만 학습   
+
+    3. 제어문
+
