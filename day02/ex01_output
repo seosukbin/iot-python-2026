@@ -1,0 +1,4 @@
+with open('./day02/부산시_해운대구_도서정보.csv', 'r', encoding='cp949') as f:
+    # data = f.read()
+    for line in f:
+        print(line.strip())
