@@ -100,6 +100,8 @@ https://www.python.org/downloads/ - 다운로드
     - 여러 파일중 시작점을 지칭 할때는 사용
     - '__name__' 특수 변수를 사용
 
+
+
 - 가상 환경
     - 프로젝트 마다 파이썬 환경을 따로 사용학시 위해 만들어진 개념
     - 프로젝트 생성시 독립도니 파이썬, 라이브러리 세트 새로 생성    
@@ -151,3 +153,17 @@ https://www.python.org/downloads/ - 다운로드
         - 사용처
             - 웹상에서 동적하므로 많은 서비스를 지원
             - github codespace = 기존 리포지토리와 연결 지원
+    
+
+    ### 데이터 분석 기초
+        - 리스트,튜플,딕셔너리
+        - 리스트 컴프리헨션
+        - 파일 입출력
+        - Numpy
+        - Pandas
+        - Matplotlib
+        - Seaborn
+        - Folium
+        - WordCloud
+        - 기초 통계
+        -데이터 전처기
