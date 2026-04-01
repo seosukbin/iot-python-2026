@@ -1,0 +1,110 @@
+import cv2
+import numpy as np
+import time
+#이미지 실시간 읽기
+from tkinter import Tk,filedialog
+
+# 전역 변수
+edited_img = None
+
+# 이미지 로드
+img = cv2.imread('./day05/cat01.jpg')
+if img is None:
+    raise FileNotFoundError('이미지 로딩 실패')
+
+origin = img.copy()
+win_name = 'Editor'
+def load_image():
+    global origin
+
+    root = Tk()
+    root.withdraw()
+    filepath = filedialog.askopenfilename(title = '이미지 열기', 
+                                         filetypes = [('Imagefiles','*.jpg *.png *.jpeg *.bmp')])
+    
+    if filepath:
+        img = cv2.imread(filepath)
+        if img is None:
+            print('이미지 로딩 실패')
+            return
+        
+        origin = img.copy()
+        print('이미지 로드 완료')
+        update()
+
+def update(_=None):
+    global edited_img
+
+    # 트랙바 값
+    alpha = 0.5 + (cv2.getTrackbarPos('Contrast', win_name) / 100.0)
+    beta = (cv2.getTrackbarPos('Brightness', win_name) - 100) // 2
+    blur = cv2.getTrackbarPos('Blur', win_name)
+    edge = cv2.getTrackbarPos('Edge', win_name)
+    rotate = cv2.getTrackbarPos('Rotate', win_name) - 180
+
+    # 밝기 + 대비
+    edited = cv2.convertScaleAbs(origin, alpha=alpha, beta=beta)
+
+    # 블러
+    if blur > 0:
+        k = blur * 2 + 1
+        edited = cv2.GaussianBlur(edited, (k, k), 0)
+
+    # 엣지
+    if edge > 0:
+        edge_img = cv2.Canny(edited, edge, edge * 2)
+        edited = cv2.cvtColor(edge_img, cv2.COLOR_GRAY2BGR)
+
+    # 회전
+    h, w = edited.shape[:2]
+    center = (w // 2, h // 2)
+    M = cv2.getRotationMatrix2D(center, rotate, 1.0)
+    edited = cv2.warpAffine(edited, M, (w, h))
+
+    # 저장용 변수
+    edited_img = edited
+
+    # 출력
+    cv2.imshow(win_name, edited)
+
+
+# 창 생성
+cv2.namedWindow(win_name)
+
+# 트랙바 생성
+cv2.createTrackbar('Contrast', win_name, 100, 200, update)
+cv2.createTrackbar('Brightness', win_name, 100, 200, update)
+cv2.createTrackbar('Blur', win_name, 0, 10, update)
+cv2.createTrackbar('Edge', win_name, 0, 200, update)
+cv2.createTrackbar('Rotate', win_name, 180, 360, update)
+
+# 초기 실행
+update()
+
+# 키 입력
+while True:
+    key = cv2.waitKey(1) & 0xff
+
+    if key == ord('r'):  # 리셋
+        cv2.setTrackbarPos('Contrast', win_name, 100)
+        cv2.setTrackbarPos('Brightness', win_name, 100)
+        cv2.setTrackbarPos('Blur', win_name, 0)
+        cv2.setTrackbarPos('Edge', win_name, 0)
+        cv2.setTrackbarPos('Rotate', win_name, 180)
+        update()
+        print('초기화 완료')
+    elif key ==ord('o'):
+        load_image()
+    elif key == ord('s'):  # 저장
+        if edited_img is None:
+            print('저장할 이미지 없음')
+        else:
+            filename = f'saved_{int(time.time())}.jpg'
+            path = f'./day05/{filename}'
+            cv2.imwrite(path, edited_img)
+            print(f'이미지 저장 완료 → {path}')
+
+    elif key == ord('q'):  # 종료
+        break
+
+cv2.destroyAllWindows()
