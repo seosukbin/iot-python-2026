@@ -274,3 +274,5 @@ https://www.python.org/downloads/ - 다운로드
 - VLC
     - 영상 처리 쪽 코덱이 필요
     
+
+
